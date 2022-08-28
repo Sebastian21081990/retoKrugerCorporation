@@ -15,7 +15,7 @@
 - Agregar las consultas específicas en los repositories
 
 ### Diagrama de Modelo de datos
-![](Modelo de datos.png)
+![Diagrama de modelo de datos](https://github.com/Sebastian21081990/retoKrugerCorporation/blob/b3a4505b258f6537e6e08650247b11f2b2080d8d/Modelo%20de%20datos.png)
 
 ### Documentación con Swagger
 - Agregar las dependencias para el manejo de swagger
