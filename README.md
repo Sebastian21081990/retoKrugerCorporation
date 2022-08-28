@@ -24,6 +24,6 @@
 - Para acceder http://localhost:8080/swagger-ui.html
 
 ## Ejecución de la aplicación
-- Clonar el proyecto
+- Clonar el proyecto de la rama `main`
 - Modificar la configuración de la conexión a la base de datos
 - Ejecutar el proyecto
