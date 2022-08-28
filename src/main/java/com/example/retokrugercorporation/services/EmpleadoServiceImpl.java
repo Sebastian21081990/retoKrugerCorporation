@@ -107,7 +107,7 @@ public class EmpleadoServiceImpl implements IEmpleadoService {
 
         if (Objects.nonNull(empleado)) {
             empleado = save(empleado);
-            vacunaUsuarioService.actualizar(empleadoDTO.getVacunaUsuarioList());
+            vacunaUsuarioService.actualizar(empleadoDTO);
             LOGGER.info("Empleado: {} actualizado", empleado.getId());
             return listarById(empleado.getId());
         } else {

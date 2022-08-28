@@ -7,10 +7,7 @@ import com.example.retokrugercorporation.dto.EmpleadoDTO;
 import com.example.retokrugercorporation.model.Empleado;
 import com.example.retokrugercorporation.services.IEmpleadoService;
 import com.example.retokrugercorporation.services.IVacunaUsuarioService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -63,8 +65,10 @@ public class EmpleadoController {
             notes = "Retorna 204 si no hay datos")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "No se pudo crear el empleado"),
-            @ApiResponse(code = 500, message = "Internal error")
+            @ApiResponse(code = 500, message = "Internal error"),
+            @ApiResponse(code = 200, message = "Se guardo correctamente")
     })
+
     @PostMapping("/guardar")
     public ResponseEntity<EmpleadoDTO> guardar(@RequestBody EmpleadoDTO empleadoDTO) {
         return new ResponseEntity<>(empleadoService.crear(empleadoDTO.getEmpleado()), HttpStatus.CREATED);
@@ -79,9 +83,9 @@ public class EmpleadoController {
     @PutMapping("/actualizar")
     public ResponseEntity<EmpleadoDTO> actualizar(@Valid @RequestBody EmpleadoDTO empleadoDTO) {
 
-            return Optional.ofNullable(empleadoService.actualizar(empleadoDTO))
-                    .map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.notFound().build());
+        return Optional.ofNullable(empleadoService.actualizar(empleadoDTO))
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
 
     }
 
@@ -130,17 +134,18 @@ public class EmpleadoController {
     }
 
     @ApiOperation(value = "Lista los empleados en un rango de fechas",
-            notes = "Retorna 204 si no hay datos")
+            notes = "Para el envio de fecha usar el formato dd-MM-yyyy")
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "No se encontro datos con esos filtros"),
             @ApiResponse(code = 500, message = "Internal error")
     })
     @GetMapping("/filtrar-por-rango-fechas-vacunacion/{fInicio}/{fFin}")
-    public ResponseEntity<List<EmpleadoByRangoFechasDTO>> filterByVaccinationDateRange(@PathVariable Long fInicio,
-                                                                                       @PathVariable Long fFin) {
+    public ResponseEntity<List<EmpleadoByRangoFechasDTO>> filterByVaccinationDateRange(@PathVariable String fInicio,
+                                                                                       @PathVariable String fFin) {
         try {
-            Date fechaInicio = new Date(fInicio);
-            Date fechaFin = new Date(fFin);
+            Date fechaInicio = new SimpleDateFormat("dd-MM-yyyy").parse(fInicio);
+            LocalDate localDateFechaFin = (new SimpleDateFormat("dd-MM-yyyy").parse(fFin)).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            Date fechaFin = Date.from(LocalDateTime.of(localDateFechaFin, LocalTime.of(23, 59, 59)).atZone(ZoneId.systemDefault()).toInstant());
             List<EmpleadoByRangoFechasDTO> empleadoList = vacunaUsuarioService.filterByVaccinationDateRange(fechaInicio, fechaFin);
             return ResponseEntity.ok(empleadoList);
         } catch (Exception e) {

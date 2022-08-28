@@ -2,6 +2,7 @@ package com.example.retokrugercorporation.services;
 
 import com.example.retokrugercorporation.dto.EmpleadoByRangoFechasDTO;
 import com.example.retokrugercorporation.dto.EmpleadoByTipoVacunaDTO;
+import com.example.retokrugercorporation.dto.EmpleadoDTO;
 import com.example.retokrugercorporation.enums.EstadoVacuna;
 import com.example.retokrugercorporation.model.Empleado;
 import com.example.retokrugercorporation.model.TipoVacuna;
@@ -74,10 +75,16 @@ public class VacunaUsuarioServiceImpl implements IVacunaUsuarioService {
 
     @Override
     @Transactional
-    public void actualizar(List<VacunaUsuario> vacunaUsuarioList) {
+    public void actualizar(EmpleadoDTO empleadoDTO) {
+
+        Empleado empleado = empleadoDTO.getEmpleado();
+        List<VacunaUsuario> vacunaUsuarioList = empleadoDTO.getVacunaUsuarioList();
 
         if(Objects.nonNull(vacunaUsuarioList) && !vacunaUsuarioList.isEmpty()){
-            vacunaUsuarioList.forEach(this::save);
+            vacunaUsuarioList.forEach(vacunaUsuario -> {
+                vacunaUsuario.setEmpleado(empleado);
+                save(vacunaUsuario);
+            });
             LOGGER.info("Se actualizo las vacunas del empleado");
         }else {
             LOGGER.error("No se pudo actualizar la lista de vacunas del empleado");

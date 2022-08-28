@@ -2,6 +2,7 @@ package com.example.retokrugercorporation.services;
 
 import com.example.retokrugercorporation.dto.EmpleadoByRangoFechasDTO;
 import com.example.retokrugercorporation.dto.EmpleadoByTipoVacunaDTO;
+import com.example.retokrugercorporation.dto.EmpleadoDTO;
 import com.example.retokrugercorporation.model.Empleado;
 import com.example.retokrugercorporation.model.VacunaUsuario;
 
@@ -22,7 +23,7 @@ public interface IVacunaUsuarioService {
 
     void deleteById(Long id);
 
-    void actualizar(List<VacunaUsuario> vacunaUsuarioList);
+    void actualizar(EmpleadoDTO empleadoDTO);
 
     List<EmpleadoByTipoVacunaDTO> filterByVaccinationType(Long idTipoVacuna);
 
