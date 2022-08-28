@@ -5,6 +5,7 @@ import com.example.retokrugercorporation.dto.EmpleadoDTO;
 import com.example.retokrugercorporation.enums.EstadoVacuna;
 import com.example.retokrugercorporation.model.Empleado;
 import com.example.retokrugercorporation.model.Usuario;
+import com.example.retokrugercorporation.model.VacunaUsuario;
 import com.example.retokrugercorporation.repository.EmpleadoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -179,6 +180,8 @@ public class EmpleadoServiceImpl implements IEmpleadoService {
 
     private EmpleadoByEstadoVacunacionDTO convertEmpleadoToEmpleadoByEstadoVacunacionDTO(Empleado empleado) {
 
+        List<VacunaUsuario> vacunaUsuarioList = vacunaUsuarioService.findByIdEmpleado(empleado);
+
         return EmpleadoByEstadoVacunacionDTO.builder()
                 .cedula(empleado.getCedula())
                 .nombres(empleado.getNombres())
@@ -187,6 +190,7 @@ public class EmpleadoServiceImpl implements IEmpleadoService {
                 .fechaNacimiento(empleado.getFechaNacimiento())
                 .direccionDomicilio(empleado.getDireccionDomicilio())
                 .vacunado(Boolean.TRUE.equals(empleado.getVacunado()) ? EstadoVacuna.VACUNADO.getEstado() : EstadoVacuna.SIN_VACUNA.getEstado())
+                .nroDosis(vacunaUsuarioList.size())
                 .build();
 
     }

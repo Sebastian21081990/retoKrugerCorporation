@@ -122,6 +122,7 @@ public class VacunaUsuarioServiceImpl implements IVacunaUsuarioService {
         TipoVacuna tipoVacuna = vacunaUsuario.getTipoVacuna();
         String estado = Boolean.TRUE.equals(empleado.getVacunado()) ?
                 EstadoVacuna.VACUNADO.getEstado() : EstadoVacuna.SIN_VACUNA.getEstado();
+        List<VacunaUsuario> vacunaUsuarioList = findByIdEmpleado(empleado);
 
         return EmpleadoByTipoVacunaDTO.builder()
                 .cedula(empleado.getCedula())
@@ -132,6 +133,7 @@ public class VacunaUsuarioServiceImpl implements IVacunaUsuarioService {
                 .direccionDomicilio(empleado.getDireccionDomicilio())
                 .vacunado(estado)
                 .tipoVacuna(tipoVacuna.getNombre())
+                .nroDosis(vacunaUsuarioList.size())
                 .build();
 
     }
@@ -142,6 +144,7 @@ public class VacunaUsuarioServiceImpl implements IVacunaUsuarioService {
         TipoVacuna tipoVacuna = vacunaUsuario.getTipoVacuna();
         String estado = Boolean.TRUE.equals(empleado.getVacunado()) ?
                 EstadoVacuna.VACUNADO.getEstado() : EstadoVacuna.SIN_VACUNA.getEstado();
+        List<VacunaUsuario> vacunaUsuarioList = findByIdEmpleado(empleado);
 
         return EmpleadoByRangoFechasDTO.builder()
                 .cedula(empleado.getCedula())
@@ -153,6 +156,7 @@ public class VacunaUsuarioServiceImpl implements IVacunaUsuarioService {
                 .vacunado(estado)
                 .tipoVacuna(tipoVacuna.getNombre())
                 .fechaVacunacion(vacunaUsuario.getFechaVacunacion())
+                .nroDosis(vacunaUsuarioList.size())
                 .build();
 
     }
